@@ -15,7 +15,7 @@ public class ParticleSystemMoverListener : ParticleSystemListener {
 
     public override int CalculateEmittedParticles(float averageSample)
     {
-        return (int)((Mathf.Exp(averageSample * 8) - 1) * 2);
+        return (int)((Mathf.Exp(averageSample * 4) - 1) * 2);
     }
 
     public override float CalculateParticleSpeed(float averageSample)
