@@ -20,11 +20,8 @@ public class AudioVisualizer : MonoBehaviour
     // Remember the last averages so we can limit the averageDb decrease
     private float maxAverage;
 
-    // There should be one average per audio listener because each listener will change at a different rate
-    private float[] currentAverages;
-
     // All the listeners. These will be sent an AudioEvent once it is calculated.
-    public AudioListener[] audioListeners;
+    public AudioEventListener[] audioListeners;
 
     // Minimum value to be recognized for color calculation of frequencies
     public float minimumVolume = 0.005f;
@@ -41,7 +38,6 @@ public class AudioVisualizer : MonoBehaviour
         // Initialize the variables that will be used to store audio data
         dbSamples = new float[256];
         spectrumSamples = new float[sSampleCount];
-        currentAverages = new float[audioListeners.Length];
     }
 
     void Update()
@@ -96,7 +92,7 @@ public class AudioVisualizer : MonoBehaviour
         frameAudioEvent.spectrumColorRepresetation = calculatedColor;
 
         // Send the audio event to all the receivers
-        foreach (AudioListener audioListener in audioListeners)
+        foreach (AudioEventListener audioListener in audioListeners)
         {
             audioListener.OnAudioEvent(frameAudioEvent);
         }
@@ -111,7 +107,6 @@ public class AudioVisualizer : MonoBehaviour
         float b = 0;
         float max = 1;
         float min = 0;
-        float dif = 1;
         int colorPrime = color / valPrime;
 
         switch (colorPrime)

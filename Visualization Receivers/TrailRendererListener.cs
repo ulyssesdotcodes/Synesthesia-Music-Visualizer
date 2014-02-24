@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(TrailRenderer))]
-public class TrailRendererListener : AudioListener {
+public class TrailRendererListener : AudioEventListener {
 	public float resetTime;
 	public bool upsideDown;
 

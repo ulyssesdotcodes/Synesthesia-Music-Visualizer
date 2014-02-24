@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WaveListener : AudioListener {
+public class WaveListener : AudioEventListener {
 
 	public LineRenderer[] lineRenderers;
 

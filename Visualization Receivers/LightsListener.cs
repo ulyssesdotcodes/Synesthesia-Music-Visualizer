@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LightsListener : AudioListener {
+public class LightsListener : AudioEventListener {
 	private Light[] lights;
 	// Use this for initialization
 	void Start () {

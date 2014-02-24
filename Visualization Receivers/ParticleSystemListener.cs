@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(ParticleSystem))]
-public class ParticleSystemListener : AudioListener {
+public class ParticleSystemListener : AudioEventListener {
 
 
 	private ParticleSystem particleSystem;
