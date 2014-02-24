@@ -1,7 +1,7 @@
-Oculus Synesthesia
+Synesthesia Music Visualizer System
 ==========
 
-Oculus Synesthesia is a music visualizer for the Oculus Rift. This GitHub repo contains the scripts for that visualizer.
+Synesthesia is a music visualizer system originally created for the Oculus Rift. This GitHub repo contains the scripts for that visualizer.
 
 Feel free to fork it and make it your own! If you add something that's useful across the board, please submit a pull request and I'll merge it in.
 
@@ -36,7 +36,7 @@ Basic Usage
 Implementation
 -----
 
-Oculus Synesthesia is designed to be an object oriented audio system based on audio events and audio listeners. The main controller takes advantage of the two methods Unity provides for interpreting an audio source - GetOutputData and GetSpectrumData. GetOutputData provides average decible level over a number of samples. GetSpectrumData provides the levels of all split into a number of buckets.
+Synesthesia is designed to be an object oriented audio system based on audio events and audio listeners. The main controller takes advantage of the two methods Unity provides for interpreting an audio source - GetOutputData and GetSpectrumData. GetOutputData provides average decible level over a number of samples. GetSpectrumData provides the levels of all split into a number of buckets.
 
 AudioVisualizer is the controller of the audio events. It gets the data from the Unity methods, calculates the root mean square value (rmsvalue) multiplied by the provided volume, and calculates the color. Then it passes all of this into each listener in its array of listeners using an AudioEvent object.
 
