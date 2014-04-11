@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioVisualizer : MonoBehaviour
@@ -22,6 +23,7 @@ public class AudioVisualizer : MonoBehaviour
 
     // All the listeners. These will be sent an AudioEvent once it is calculated.
     public AudioEventListener[] audioListeners;
+    public List<AudioEventListener> expandableAudioListeners;
 
     // Minimum value to be recognized for color calculation of frequencies
     public float minimumVolume = 0.005f;
@@ -38,6 +40,12 @@ public class AudioVisualizer : MonoBehaviour
         // Initialize the variables that will be used to store audio data
         dbSamples = new float[256];
         spectrumSamples = new float[sSampleCount];
+
+        expandableAudioListeners = new List<AudioEventListener>();
+        foreach (AudioEventListener al in audioListeners)
+        {
+            expandableAudioListeners.Add(al);
+        }
     }
 
     void Update()
@@ -62,7 +70,7 @@ public class AudioVisualizer : MonoBehaviour
         }
 
         averageDbSample = Mathf.Sqrt(averageDbSample / dbSamples.Length);
-        frameAudioEvent.averageDbSample = averageDbSample * volume;
+        frameAudioEvent.averageDbSample = Mathf.Exp(-2f * averageDbSample) * averageDbSample * volume;
 
         // Calculate the color based on the samples data. Most of the samples after a certain index
         // are 0 so we stop 
@@ -82,6 +90,20 @@ public class AudioVisualizer : MonoBehaviour
             }
         }
 
+        int currentFrequencySplit = 0;
+        float[] frequencySplits = new float[4];
+        for (int i = 0; i < maxIndex; i++)
+        {
+            currentFrequencySplit = (int)(4 * i / maxIndex);
+            frequencySplits[currentFrequencySplit] += spectrumSamples[i] * spectrumSamples[i];
+        }
+
+        for (int i = 0; i < frequencySplits.Length; i++)
+        {
+            frequencySplits[i] = Mathf.Sqrt(frequencySplits[i]);
+        }
+        frameAudioEvent.frequencySplitData = frequencySplits;
+
         // Turn the int from 0 to maxValue into a color based on an hsv algorithm
         Color calculatedColor = new Color(0, 0, 0, 0);
         if (maxImportantIndex >= 6)
@@ -91,8 +113,9 @@ public class AudioVisualizer : MonoBehaviour
         }
         frameAudioEvent.spectrumColorRepresetation = calculatedColor;
 
+
         // Send the audio event to all the receivers
-        foreach (AudioEventListener audioListener in audioListeners)
+        foreach (AudioEventListener audioListener in expandableAudioListeners)
         {
             audioListener.OnAudioEvent(frameAudioEvent);
         }
@@ -157,5 +180,6 @@ public class AudioVisualizer : MonoBehaviour
         public float[] spectrumData;
         public float[] dbData;
         public Color spectrumColorRepresetation;
+        public float[] frequencySplitData;
     }
 }

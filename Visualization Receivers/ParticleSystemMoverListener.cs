@@ -3,14 +3,34 @@ using System.Collections;
 
 public class ParticleSystemMoverListener : ParticleSystemListener {
 
+    public Vector3 movementDirection;
+    public Vector3 volumeDirection;
+    public float loopDistance = 15f;
+    public float movementMultiplier;
+
+    private Vector3 basePosition;
+    private Vector3 startPosition;
+
+    protected override void Start()
+    {
+        base.Start();
+        basePosition = transform.position;
+        startPosition = transform.position;
+    }
+
     public override void ProcessAverageDBSample(float averageDbSample)
     {
         base.ProcessAverageDBSample(averageDbSample);
-        //moving stuff
-        float newTrailX = (transform.position.x + 15 + Time.deltaTime * 2) % 30 - 15;
 
-        float newTrailY = Mathf.Lerp(0.5f, 5f, averageDbSample);
-        transform.position = new Vector3(newTrailX, newTrailY, transform.position.z);
+        basePosition += movementDirection * Time.deltaTime;
+
+        if (Vector3.Distance(basePosition, startPosition) > loopDistance)
+        {
+            Debug.Log(basePosition + ", " + startPosition);
+            basePosition += 2 * (startPosition - basePosition);
+        }
+
+        transform.position = basePosition + volumeDirection * Mathf.Lerp(0f, 10f, averageDbSample * movementMultiplier);
     }
 
     public override int CalculateEmittedParticles(float averageSample)

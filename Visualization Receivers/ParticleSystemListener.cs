@@ -8,8 +8,11 @@ public class ParticleSystemListener : AudioEventListener {
 	private ParticleSystem particleSystem;
 	private ParticleSystem[] subemitters;
 
-	void Start() {
-		particleSystem = GetComponent<ParticleSystem> ();
+    public float emissionMultiplier = 8f;
+
+    protected virtual void Start()
+    {
+		this.particleSystem = GetComponent<ParticleSystem> ();
 
 		int i = 0;
 		subemitters = new ParticleSystem[transform.childCount];
@@ -26,12 +29,12 @@ public class ParticleSystemListener : AudioEventListener {
 	}
 
 	public override void ProcessRepresentationalColor (Color color) {
-		particleSystem.startColor = color;
+		this.particleSystem.startColor = color;
 	}
 
     public virtual int CalculateEmittedParticles(float averageSample)
     {
-        return (int)(averageSample * 8);
+        return (int)(averageSample * emissionMultiplier);
     }
 
     public virtual float CalculateParticleSpeed(float averageSample)

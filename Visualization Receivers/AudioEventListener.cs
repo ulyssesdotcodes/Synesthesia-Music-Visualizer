@@ -75,4 +75,13 @@ public class AudioEventListener :MonoBehaviour {
         // Move the max allowed average down
         maxAverage -= Time.deltaTime * GetMaxAverageDecrease();
     }
+
+    void OnDestroy()
+    {
+        AudioVisualizer av = GameObject.FindObjectOfType<AudioVisualizer>();
+        if (av != null)
+        {
+            av.expandableAudioListeners.Remove(this);
+        }
+    }
 }

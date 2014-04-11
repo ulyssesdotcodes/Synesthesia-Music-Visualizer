@@ -8,26 +8,33 @@ public class TrailRendererListener : AudioEventListener {
 
 	TrailRenderer trailRenderer;
 
+    private Vector3 basePosition;
+
 	void Start() {
 		trailRenderer = GetComponent<TrailRenderer> ();
+        basePosition = transform.localPosition;
 	}
 	
 	public override void ProcessAverageDBSample (float averageDbSample) {
 		//Trail stuff
-		float newTrailX = (transform.position.x - 15 - Time.deltaTime * 2) % 30 + 15;
+		float newTrailX = (basePosition.x - 30 - Time.deltaTime * 2) % 60 + 30;
 		
 		if (trailRenderer.time < 0f) {
 			trailRenderer.time = resetTime;
 		}
 
-		if (newTrailX < -14.5f || newTrailX > 14.5f) {
+		if (newTrailX < -29.5f || newTrailX > 29.5f) {
 			resetTime = trailRenderer.time;
 			trailRenderer.time = -1.0f;
 		}
 
+        basePosition.x = newTrailX;
 		
 		float newTrailY = Mathf.Lerp (0, 3f, averageDbSample) * (upsideDown ? -1 : 1);
-		transform.position = new Vector3 (newTrailX, newTrailY + 2.5f, transform.position.z);
+
+        Vector3 realWorldPosition = transform.TransformPoint(basePosition) + Vector3.up * newTrailY;
+
+        transform.localPosition = transform.InverseTransformPoint(realWorldPosition);
 	}
 
     protected override float GetVolumeIncreaseRate()
